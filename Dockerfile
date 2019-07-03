@@ -1,4 +1,4 @@
-FROM php:7.3.5-fpm-alpine3.9
+FROM php:7.4.0alpha2-fpm-alpine3.10
 RUN set -xe \
     && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
     && apk add --no-cache libpng-dev \
