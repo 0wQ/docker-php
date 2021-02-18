@@ -1,18 +1,9 @@
-FROM php:7.4.0alpha2-fpm-alpine3.10
-RUN set -xe \
-    && apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
-    && apk add --no-cache libpng-dev cairo-dev \
-    && pecl install -o -f redis  \
-    && echo 'extension=redis.so' > /usr/local/etc/php/conf.d/redis.ini \
-    && docker-php-ext-install \
-        pdo \
-        pdo_mysql \
-        mysqli \
-        mbstring \
-        opcache \
-        gd \
-    && docker-php-source delete \
-    && rm -rf /usr/share/php \
-    && rm -rf /tmp/* \
-    && apk del .phpize-deps \
-    && rm -rf /var/cache/apk/*
+FROM php:fpm-alpine
+
+RUN apk add --no-cache tzdata
+
+RUN docker-php-ext-configure \
+    && opcache --enable-opcache \
+    && docker-php-ext-install opcache
+
+COPY config/opcache.ini $PHP_INI_DIR/conf.d/
